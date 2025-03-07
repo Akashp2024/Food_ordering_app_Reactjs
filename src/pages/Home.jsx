@@ -6,6 +6,7 @@ import Food_items from "../Food_items";
 import { dataContext } from "../context/UserContext";
 import { RxCross1 } from "react-icons/rx";
 import Card2 from "../Components/Card2";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   let { cate, setcategory, input, showcart, setshowcart } =
@@ -21,17 +22,9 @@ const Home = () => {
       setcategory(filteredCategory);
     }
   }
-  // const filterCategory = (category) => {
-  //   if (category === "all") {
-  //     setcategory(Food_items);
-  //   } else {
-  //     let filteredCategory = Food_items.filter(
-  //       (item) => item.food_category === category
-  //     );
-  //     setcategory(filteredCategory);
-  //   }
-  //   console.log(category);
-  // };
+
+  let items = useSelector((state) => state.cart);
+
   return (
     <div className=" bg-slate-200 w-full min-h-screen">
       <Nav></Nav>
@@ -75,7 +68,18 @@ const Home = () => {
             onClick={() => setshowcart(false)}
           />
         </header>
-        <Card2></Card2>
+        <div className="w-full mt-9 flex flex-col gap-6">
+          {items.map((item) => (
+            <Card2
+              name={item.name}
+              image={item.image}
+              price={item.price}
+              key={item.id}
+              id={item.id}
+              qty={item.qty}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
