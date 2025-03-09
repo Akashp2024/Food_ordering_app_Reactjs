@@ -5,13 +5,25 @@ const cartSlice = createSlice({
     initialState:[],
     reducers:{
         additem:(state,action)=>{
-            state.push(action.payload)
+            let existitem = state.find((item)=>item.id===action.payload.id)
+            if(existitem){
+                return state.map((item)=>(item.id===action.payload.id?{...item, qty:item.qty+1}:item))
+            }else
+            {
+                state.push(action.payload)
+            }  
         },
         removeitem:(state,action)=>{
             return state.filter((item)=>item.id!==action.payload)
+        },
+        incrementqty:(state,action)=>{
+            return state.map((item)=>item.id===action.payload.id?{...item, qty:item.qty+1}:item)
+        },
+        decrementqty:(state,action)=>{
+            return state.map((item)=>item.id===action.payload.id?{...item, qty:item.qty-1}:item)
         }
     }
 })
 
-export const {additem,removeitem} = cartSlice.actions;
+export const {additem,removeitem,incrementqty,decrementqty} = cartSlice.actions;
 export default cartSlice.reducer;

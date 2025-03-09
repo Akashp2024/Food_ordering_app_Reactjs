@@ -24,6 +24,13 @@ const Home = () => {
   }
 
   let items = useSelector((state) => state.cart);
+  let subtotal = items.reduce(
+    (total, item) => total + item.qty * item.price,
+    0
+  );
+  let deliveryfee = 20;
+  let taxes = (subtotal * 0.5) / 100;
+  let total = Math.floor(subtotal + deliveryfee + taxes);
 
   return (
     <div className=" bg-slate-200 w-full min-h-screen">
@@ -55,9 +62,9 @@ const Home = () => {
         ))}
       </div>
       <div
-        className={`w-full md:w-[40vw] h-[100%] fixed top-0 right-0 bg-white shadow-xl p-6 transition-all duration-400 ${
+        className={`w-full md:w-[40vw] h-[100%] fixed top-0 right-0 bg-white shadow-xl p-5 transition-all duration-400 overflow-auto ${
           showcart ? "translate-x-0" : "translate-x-full"
-        }`}
+        } flex flex-col items-center`}
       >
         <header className="w-full flex justify-between items-center ">
           <span className="text-green-400 text-[18px] font-semibold">
@@ -68,18 +75,59 @@ const Home = () => {
             onClick={() => setshowcart(false)}
           />
         </header>
-        <div className="w-full mt-9 flex flex-col gap-6">
-          {items.map((item) => (
-            <Card2
-              name={item.name}
-              image={item.image}
-              price={item.price}
-              key={item.id}
-              id={item.id}
-              qty={item.qty}
-            />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <div className="w-full h-[80%] flex justify-center items-center">
+            <span className="text-3xl font-semibold text-green-400">
+              No Items in Cart
+            </span>
+          </div>
+        ) : (
+          <>
+            <div className="w-full h-[20%] mt-6 flex flex-col gap-6">
+              {items.map((item) => (
+                <Card2
+                  name={item.name}
+                  image={item.image}
+                  price={item.price}
+                  key={item.id}
+                  id={item.id}
+                  qty={item.qty}
+                />
+              ))}
+            </div>
+            <div className="w-full border-t-2 border-gray-400 mt-1 flex flex-col gap-2 p-8 border-b-2">
+              <div className="w-full flex justify-between items-center text-2xl">
+                <span className="text-gray-600 font-semibold">Subtotal</span>
+                <span className="text-green-600 font-semibold">
+                  Rs {subtotal}/-
+                </span>
+              </div>
+              <div className="w-full flex justify-between items-center text-2xl">
+                <span className="text-gray-600 font-semibold">DeliveryFee</span>
+                <span className="text-green-600 font-semibold">
+                  Rs {deliveryfee}/-
+                </span>
+              </div>
+              <div className="w-full flex justify-between items-center text-2xl">
+                <span className="text-gray-600 font-semibold">Taxes</span>
+                <span className="text-green-600 font-semibold">
+                  Rs {taxes}/-
+                </span>
+              </div>
+            </div>
+            <div className="w-full flex flex-col justify-between gap-2">
+              <div className="w-full flex justify-between items-center text-3xl p-5">
+                <span className="text-gray-600 font-semibold">Total</span>
+                <span className="text-green-600 font-semibold">
+                  Rs {total}/-
+                </span>
+              </div>
+            </div>
+            <button className="w-[80%] p-3 bg-green-400 rounded-lg text-3xl cursor-pointer hover:bg-green-500 text-white font-semibold">
+              Place Order
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

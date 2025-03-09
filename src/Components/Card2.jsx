@@ -2,27 +2,36 @@ import React from "react";
 import image1 from "../assets/image1.avif";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
-import { removeitem } from "../redux/cartSlice";
+import { decrementqty, removeitem } from "../redux/cartSlice";
+import { incrementqty } from "../redux/cartSlice";
 
 const Card2 = ({ name, image, id, price, qty }) => {
   let dispatch = useDispatch();
 
   return (
-    <div className="w-full h-[120px] p-2 shadow-lg flex justify-between">
+    <div className="w-full h-[80%] p-2 shadow-lg flex justify-between">
       <div className="w-[60%] h-full  flex gap-5">
         <div className="w-[60%] h-full overflow-hidden rounded-lg">
           <img src={image} alt="" className="object-cover" />
         </div>
         <div className="w-[40%] h-full flex flex-col gap-5">
-          <div className="text-lg font-semibold">{name}</div>
+          <div className="text-xl font-semibold">{name}</div>
           <div className="w-[110px] h-[50px] bg-slate-400 flex rounded-lg overflow-hidden shadow-lg font-semibold border-2 border-green-500">
-            <button className="w-[30%] h-full bg-white flex justify-center items-center text-green-500 hover:bg-green-300">
+            <button
+              className="w-[30%] h-full bg-white flex justify-center items-center text-green-500 hover:bg-green-300"
+              onClick={() => (qty > 1 ? dispatch(decrementqty({ id: id })) : 1)}
+            >
               -
             </button>
             <span className="w-[40%] h-full bg-slate-200 flex justify-center items-center text-green-500">
               {qty}
             </span>
-            <button className="w-[30%] h-full bg-white flex justify-center items-center text-green-500 hover:bg-green-300">
+            <button
+              className="w-[30%] h-full bg-white flex justify-center items-center text-green-500 hover:bg-green-300"
+              onClick={() => {
+                dispatch(incrementqty({ id: id }));
+              }}
+            >
               +
             </button>
           </div>
