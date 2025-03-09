@@ -7,6 +7,7 @@ import { dataContext } from "../context/UserContext";
 import { RxCross1 } from "react-icons/rx";
 import Card2 from "../Components/Card2";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Home = () => {
   let { cate, setcategory, input, showcart, setshowcart } =
@@ -50,16 +51,24 @@ const Home = () => {
       ) : null}
 
       <div className="w-full flex flex-wrap justify-center items-center gap-5 pt-8 px-9 pb-8">
-        {cate.map((item) => (
-          <Card
-            name={item.food_name}
-            image={item.food_image}
-            id={item.id}
-            price={item.price}
-            type={item.food_type}
-            key={item.food_name}
-          />
-        ))}
+        {cate.length > 0 ? (
+          cate.map((item) => (
+            <Card
+              name={item.food_name}
+              image={item.food_image}
+              id={item.id}
+              price={item.price}
+              type={item.food_type}
+              key={item.food_name}
+            />
+          ))
+        ) : (
+          <div className="w-full text-center py-10 flex flex-col items-center gap-4">
+            <span className="text-4xl font-semibold text-green-600">
+              No Match Found
+            </span>
+          </div>
+        )}
       </div>
       <div
         className={`w-full md:w-[40vw] h-[100%] fixed top-0 right-0 bg-white shadow-xl p-5 transition-all duration-400 overflow-auto ${
@@ -83,7 +92,7 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <div className="w-full h-[20%] mt-6 flex flex-col gap-6">
+            <div className="w-full mt-6 flex flex-col gap-4">
               {items.map((item) => (
                 <Card2
                   name={item.name}
@@ -95,7 +104,7 @@ const Home = () => {
                 />
               ))}
             </div>
-            <div className="w-full border-t-2 border-gray-400 mt-1 flex flex-col gap-2 p-8 border-b-2">
+            <div className="w-full border-t-2 border-gray-400 flex flex-col gap-2 p-8 mt-5 border-b-2">
               <div className="w-full flex justify-between items-center text-2xl">
                 <span className="text-gray-600 font-semibold">Subtotal</span>
                 <span className="text-green-600 font-semibold">
@@ -123,7 +132,10 @@ const Home = () => {
                 </span>
               </div>
             </div>
-            <button className="w-[80%] p-3 bg-green-400 rounded-lg text-3xl cursor-pointer hover:bg-green-500 text-white font-semibold">
+            <button
+              className="w-[80%] p-3 bg-green-400 rounded-lg text-3xl cursor-pointer hover:bg-green-500 text-white font-semibold"
+              onClick={() => toast("Order Placed", { type: "success" })}
+            >
               Place Order
             </button>
           </>
